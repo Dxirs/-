@@ -462,7 +462,7 @@ end
       end
     end
 
- lg.print("tt=" ..  math.floor(tt), player.body:getX()-21, player.body:getY()-80)
+ --lg.print("tt=" ..  math.floor(tt), player.body:getX()-21, player.body:getY()-80)
       -- DRAW KD STATE
 
     --  if gameState == 2 then
@@ -562,29 +562,37 @@ end
       cam:detach()
 
 --меню игры
-
-if love.keyboard.isDown("p") then
-gameState = 2
+if gameState == 1 then
+dvig = 2
+dvig1 = 2
+end
+if gameState == 2 then
+dvig = 1
+dvig1 = 1
 end
 if gameState == 3 then
-  dvig = 2
-  dvig1 = 2
-
+dvig = 2
+dvig1 = 2
 end
-if tt == 4 and gameState == 3 then
+if gameState == 4 then
+dvig = 2
+dvig1 = 2
+end
+
+if tt == 4 and gameState == 4 then
 lg.draw(sprites.menu4,500,300)
 end
-if tt == 3 and gameState == 3 then
+if tt == 3 and gameState == 4 then
 lg.draw(sprites.menu3,500,300)
 end
-if tt == 2 and gameState == 3 then
+if tt == 2 and gameState == 4 then
 lg.draw(sprites.menu2,500,300)
 end
-if tt == 1 and gameState == 3 then
+if tt == 1 and gameState == 4 then
 lg.draw(sprites.menu1,500,300)
 end
 
-if tt == 1 and gameState == 3 and love.keyboard.isDown("return") then
+if tt == 1 and gameState == 4 and love.keyboard.isDown("return") then
   love.event.quit()
 end
 
@@ -747,8 +755,8 @@ elseif key == "g" and luk2 == 2 and timer5 >= 0 and arb == 3 then
   arrows2 = arrows2 - 1
   spawnBullet_2()
 elseif key == "escape" and gameState == 2 then
-  gameState = 3
-elseif key == "escape" and gameState == 3 then
+  gameState = 4
+elseif key == "escape" and gameState == 4 then
   gameState = 2
 elseif key == "1" and statusdialog == 2 then
   statusdialog = 3
@@ -758,9 +766,9 @@ elseif key == "1" and statusdialog_1 == 2 then
   statusdialog_1 = 3
 elseif key == "2" and statusdialog_1 == 2 then
   statusdialog_1 = 4
-elseif key == "up" and gameState == 3 then
+elseif key == "up" and gameState == 4 then
 tt = tt + 1
-elseif key == "down" and gameState == 3 then
+elseif key == "down" and gameState == 4 then
 tt = tt - 1
 end
 
