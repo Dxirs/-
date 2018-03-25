@@ -1,23 +1,19 @@
 --[[
-
-   RESOURCES FILE FOR MAIN :)
-
+RESOURCES FILE FOR MAIN :)
 ]]
 platforms = {}
 sprites = {}
 -- VARIABLES FOR MAKE EASY U LIFE :D
 local la = love.audio
 local lg = love.graphics
-
 COLORS = {
-  blue  = {0,0,255},
-  white = {255,255,255},
-  red   = {255,0,0},
-  green = {0,255,0},
-  black = {0,0,0},
-  console = {0, 255, 0, 255},
+blue  = {0,0,255},
+white = {255,255,255},
+red   = {255,0,0},
+green = {0,255,0},
+black = {0,0,0},
+console = {0, 255, 0, 255},
 }
-
 function loadImages()
 sprites.pusto = lg.newImage('assets/sprites/pusto.png')
 sprites.coin_sheet   = lg.newImage('assets/sprites/coin_sheet.png')
@@ -90,159 +86,152 @@ loadUI()
 end
 
 function loadSounds()
-  -- Game Over sound
-  game_over_music = la.newSource("assets/sounds/gameover.wav")
-  -- Menu SFX Sounds
-  menu_sfx = la.newSource("assets/sounds/sfx.wav")
-  -- Main music
-  main_sound = la.newSource("assets/sounds/main_sound.mp3")
-  main_sound:setLooping(true)
-  main_sound:setVolume (0.2)
-  main_sound:setPitch(0.9)
-  -- COIN COLLECT MUSIC
-  coin_sound = la.newSource('assets/sounds/coin.mp3')
-  coin_sound:setVolume(0.8)
-  coin_sound:setPitch(0.9)
-  -- BIRD SOUND
-  chirik_sound = la.newSource('assets/sounds/chirik.mp3')
-  chirik_sound:setVolume(0.9)
-  chirik_sound:setPitch(0.9)
+-- Game Over sound
+game_over_music = la.newSource("assets/sounds/gameover.wav")
+-- Menu SFX Sounds
+menu_sfx = la.newSource("assets/sounds/sfx.wav")
+-- Main music
+main_sound = la.newSource("assets/sounds/main_sound.mp3")
+main_sound:setLooping(true)
+main_sound:setVolume (0.2)
+main_sound:setPitch(0.9)
+-- COIN COLLECT MUSIC
+coin_sound = la.newSource('assets/sounds/coin.mp3')
+coin_sound:setVolume(0.8)
+coin_sound:setPitch(0.9)
+-- BIRD SOUND
+chirik_sound = la.newSource('assets/sounds/chirik.mp3')
+chirik_sound:setVolume(0.9)
+chirik_sound:setPitch(0.9)
 end
-
 function loadFonts()
-  myFont = lg.newFont(20)
-  pFont = lg.newFont(18)
-  iFont = lg.newFont(12)
-  ui_coins_font = lg.newFont('assets/fonts/font.ttf', 24)
-  dialog = lg.newFont('assets/fonts/font3.ttf', 20)
-  game_over_font = lg.newFont('assets/fonts/font.ttf', 60)
+myFont = lg.newFont(20)
+pFont = lg.newFont(18)
+iFont = lg.newFont(12)
+ui_coins_font = lg.newFont('assets/fonts/font.ttf', 24)
+dialog = lg.newFont('assets/fonts/font3.ttf', 20)
+game_over_font = lg.newFont('assets/fonts/font.ttf', 60)
 end
 function loadVariables()
-  -- SETUP DEFAULT VALUES
-  gameState = 1 -- Cостояние игры
-  --[[
-      -- Реализовать не удалось (Оставил по умолчанию) :(
-  5 - STATE_LEVEL_COMPLETE - Уровень завершён
-  4 - STATE_PAUSED - Игра приостановлена
-  3 - STATE_STOP - Игра остановлена
-  2 - STATE_INGAME - Играем
-  1 - STATE_MAINMENU - Главное меню
-                                       ]]--
-
-  arrows = 10
-  arrows2 = 10
-  lei = 0
-  arb = 1
-  tp = 1
-  bird = 1
-  kg = 1
-  ki = 1
-  to = 1
-  tt = 4
-  ty = 1
-  tl = 1
-  tu = 1
-  dvig = 1
-  dvig1 = 1
-  c = 1
-  vo = 1
-  cami = 1
-  chirik = 1
-  chirik2 = 1
-  statusdialog = 1
-  statusdialog_1 = 1
-  dialogplayer = 1
-  score = 0
-  timer = 0
-  timer1 = 0
-  timer2 = 0
-  timer3 = 0
-  timer4 = 0
-  timer5 = 0
-  timer6 = 0
-  timer7 = 0
-  timer8 = 0
-  timer9 = 0
-  timer10 = 0
-  timer11 = 0
+-- SETUP DEFAULT VALUES
+gameState = 1 -- Cостояние игры
+--[[
+-- Реализовать не удалось (Оставил по умолчанию) :(
+5 - STATE_LEVEL_COMPLETE - Уровень завершён
+4 - STATE_PAUSED - Игра приостановлена
+3 - STATE_STOP - Игра остановлена
+2 - STATE_INGAME - Играем
+1 - STATE_MAINMENU - Главное меню
+]]--
+arrows = 10 -- Количество стрел для первого игрока
+arrows2 = 10 -- Количество стрел для первого игрока
+arb = 1 -- Статус отсутствия лука у игроков
+tp = 1 --
+bird = 1
+kg = 1
+ki = 1
+to = 1
+tt = 4
+ty = 1
+tm = 2
+tm = 4
+tl = 1
+tu = 1
+dvig = 1
+dvig1 = 1
+cc = 1
+vo = 1
+cami = 1
+chirik = 1
+chirik2 = 1
+statusdialog = 1
+statusdialog_1 = 1
+dialogplayer = 1
+score = 0
+timer = 0
+timer1 = 0
+timer2 = 0
+timer3 = 0
+timer4 = 0
+timer5 = 0
+timer6 = 0
+timer7 = 0
+timer8 = 0
+timer9 = 0
+timer10 = 0
+timer11 = 0
 end
-
 function loadButtons()
-  -- SETUP BUTTONS (for menu)
-   button = {} -- 1 плеер
-   button.x = 640
-   button.y = 300
-   button.size = 40
-   --
-   button2 = {} -- 2 плеер
-   button2.x = 640
-   button2.y = 400
-   button2.size = 40
-   --
-   button1 = {} --выход
-   button1.x = 640
-   button1.y = 500
-   button1.size = 40
-
+-- SETUP BUTTONS (for menu)
+button = {} -- 1 плеер
+button.x = 640
+button.y = 300
+button.size = 40
+--
+button2 = {} -- 2 плеер
+button2.x = 640
+button2.y = 400
+button2.size = 40
+--
+button1 = {} --выход
+button1.x = 640
+button1.y = 500
+button1.size = 40
 end
-
 function updatesCore(dt)
-  -- MAP UPDATES
-
-  myWorld:update(dt)
-  myWorld1:update(dt)
-  myWorld2:update(dt)
-  gameMap:update(dt)
-  -- OTHERS UPDATES
-  coinUpdate(dt)
-  playerUpdate(dt)
-  player_Update(dt)
-  player_1Update(dt)
-  player_1_1Update(dt)
-  monstrUpdate(dt)
-  player.animation:update(dt)
-  player_1.animation:update(dt)
-  if gameState == 2 then
-  monstr.animation:update(dt)
-  npc.animation:update(dt)
-  npc1.animation:update(dt)
-  npc_bird.animation:update(dt)
-  animmoveUpdate(dt)
-  animmove1Update(dt)
-  animbirdUpdate(dt)
+-- MAP UPDATES
+myWorld:update(dt)
+myWorld1:update(dt)
+myWorld2:update(dt)
+gameMap:update(dt)
+-- OTHERS UPDATES
+coinUpdate(dt)
+playerUpdate(dt)
+player_Update(dt)
+player_1Update(dt)
+player_1_1Update(dt)
+monstrUpdate(dt)
+player.animation:update(dt)
+player_1.animation:update(dt)
+if gameState == 2 then
+monstr.animation:update(dt)
+npc.animation:update(dt)
+npc1.animation:update(dt)
+npc_bird.animation:update(dt)
+animmoveUpdate(dt)
+animmove1Update(dt)
+animbirdUpdate(dt)
 end
 end
-
 function TempCode()
  -- Здесь код, который будет удалён в релизе (Всякие кнопочки :D )
-  if love.keyboard.isDown("f1") then
-    main_sound:play()
-  end
-  if love.keyboard.isDown("f2") then
-    main_sound:pause()
-  end
-  if love.keyboard.isDown("f3") then
-    main_sound:stop()
-  end
-  if love.keyboard.isDown("space") then
-      love.event.quit("restart")
-  end
+if love.keyboard.isDown("f1") then
+main_sound:play()
 end
-
+if love.keyboard.isDown("f2") then
+main_sound:pause()
+end
+if love.keyboard.isDown("f3") then
+main_sound:stop()
+end
+if love.keyboard.isDown("space") then
+love.event.quit("restart")
+end
+end
 function OtherFunctions()
-  function beginContact(a,b, coll)
-    player.grounded = true
-  end
-  ----------------------------------------
-  function endContact(a, b, coll)
-      player.grounded = false
-  end
-  ----------------------------------------
-  function beginContact1(a,b, coll)
-    player_1.grounded1 = true
-  end
-  ----------------------------------------
-  function endContact1(a, b, coll)
-      player_1.grounded1 = false
-  end
+function beginContact(a,b, coll)
+player.grounded = true
+end
+----------------------------------------
+function endContact(a, b, coll)
+player.grounded = false
+end
+----------------------------------------
+function beginContact1(a,b, coll)
+player_1.grounded1 = true
+end
+----------------------------------------
+function endContact1(a, b, coll)
+player_1.grounded1 = false
+end
 end

@@ -44,14 +44,12 @@
 ]]--
 require('game')
 require("resources")
-
 function love.load()
-  loadGame()
+loadGame()
 end
 function love.update(dt)
-  updateGame(dt)
+updateGame(dt)
 end
-
 function love.draw()
-  drawGame()
+drawGame()
 end
