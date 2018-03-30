@@ -4,16 +4,16 @@ monstr.y = 550
 monstr.body2 = love.physics.newBody(myWorld2, monstr.x,monstr.y, "dynamic", 200 ) -- может двигаться
 monstr.shape2 = love.physics.newRectangleShape(32, 92)
 monstr.fixture2 = love.physics.newFixture(monstr.body2, monstr.shape2)
-monstr.speed = 100 -- [[5]] горизонтальная скорость игрока
+monstr.speed = 100 -- Скорость моба
 monstr.angle = 0
-monstr.grounded = false ---[[6]] ложь если человечек в прыжке, истина если стоит на платфоме
+monstr.grounded = false
 monstr.dead = false
-monstr.sprite = sprites.monstr  ---[[7]]
-monstr.body2:setFixedRotation(true)  ---[[8]]
+monstr.sprite = sprites.monstr
+monstr.body2:setFixedRotation(true)
 monstr.grid = anim8.newGrid(60,98,120,98)
 monstr.animation = anim8.newAnimation(monstr.grid('1-2',1),0.3)
 
-
+-- Обновление моба
 function monstrUpdate(dt)
 if monstr.body2:getY() < 584 then
 monstr.body2:setType("dynamic")

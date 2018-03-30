@@ -1,6 +1,6 @@
 player_1 = {}
 player_1.x =2140 --2140
-player_1.y = 550
+player_1.y = 530
 player_1.body1 = love.physics.newBody(myWorld1, player_1.x,player_1.y, "dynamic" ) -- тело может двигаться
 player_1.shape1 = love.physics.newRectangleShape(32, 92)
 player_1.fixture1 = love.physics.newFixture(player_1.body1, player_1.shape1)

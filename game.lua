@@ -1,6 +1,13 @@
-require('ui') -- подключение карты
-require("resources") -- ...
+--[[
+      Временно здесь и будет перенесено в доки
+    UI - User Interface - Интерфейс пользователя
 
+]]--
+
+--width = love.graphics.getWidth( )
+--height = love.graphics.getHeight( )
+require('ui') -- Подключение Графического интерфейса
+require("resources") -- Подключение всех ресурсов
 local la = love.audio
 local lg = love.graphics
 local lp = love.physics
@@ -12,18 +19,19 @@ function loadGame()
 --Игроки
 health = 10 -- Жизни первого игрока
 health2 = 10 -- Жизни второго игрока
---Мобы
-health3 = 10 -- Жизни первого противника
-loadImages() -- ...
-loadSounds() -- ...
-loadFonts() --  ...
-loadVariables() -- ...
-loadButtons() -- ...
+-- Мобы
+health_mob = 10 -- Жизни первого противника
+-- Загрузочный блок
+loadImages() -- Загрузка всех изображений из resources.lua
+loadSounds() -- Загрузка всех звуков из resources.lua
+loadFonts() -- Загрузка всех шрифтов из resources.lua
+loadVariables() -- Загрузка всех переменных из resources.lua
+loadButtons() -- Загрузка всех кнопок из resources.lua
 -- Гравитация для всех миров
 myWorld  = lp.newWorld(0, 800, false) -- Мир в котором существует первый игрок
 myWorld1 = lp.newWorld(0, 800, false)-- Мир в котором существует второй игрок
 myWorld2 = lp.newWorld(0, 800, false) -- Мир в котором существуют противники
---Обработка соприкосновений тел
+-- Обработка соприкосновений тел
 myWorld:setCallbacks(beginContact, endContact, preSolve, postSolve) -- Для первого мира в котором существует игрок 1
 myWorld1:setCallbacks(beginContact1, endContact1, preSolve1, postSolve1) -- Для второго мира в котором существует игрок 2
 myWorld2:setCallbacks(beginContact2, endContact2, preSolve2, postSolve2) -- Для третьего мира в котором существует первый противник
@@ -35,7 +43,6 @@ require('npc') -- Первый нпс житель
 require('npc1') -- Второй нпс житель
 require('npc_bird') -- Птичка
 require('coin') -- Отвечает за монетки
-require('menu') -- Отвечает за меню
 require('health') -- Отвечает за обработку здоровья персонажей
 require('bullets') -- Отвечает за все снаряды
 require('monstr') -- Первый противник
@@ -73,8 +80,11 @@ end
 if player.dead == true and player_1.dead == false then -- Отвечает за переключение камеры если умер игрок 1
 cam:lookAt(player_1.body1:getX(), lg.getHeight()/2)
 end
-if player_1.dead == true and player.dead == false then -- Отвечает за переключение камеры если умер игрок 2
+if player_1.dead == true and player.dead == false and m == 2 then -- Отвечает за переключение камеры если умер игрок 2
 cam:lookAt(player.body:getX(), lg.getHeight()/2)
+end
+if player_1.dead == true and player.dead == false and m == 3 then -- Отвечает за переключение камеры если умер игрок 2
+cam:lookAt(player.body:getX()+300, lg.getHeight()/2)
 end
 if player_1.dead == true and player.dead == true then -- Отвечает за переключение если умерли оба игрока
 gameState = 3
@@ -139,11 +149,29 @@ end
 if timer11 < 0 then -- Таймер для ...
 timer11 = timer11 + dt
 end
+if rt > 3 then -- Ограничение списка меню
+rt = rt - 1
+end
+if rt <= 0 then -- Ограничение списка меню
+rt = rt + 1
+end
 if tt > 4 then -- Ограничение списка меню
 tt = tt - 1
 end
 if tt <= 0 then -- Ограничение списка меню
 tt = tt + 1
+end
+if tr > 5 then -- Ограничение списка опций
+tr = tr - 1
+end
+if tr <= 0 then -- Ограничение списка опций
+tr = tr + 1
+end
+if te > 10 then -- Ограничение списка song
+te = te - 1
+end
+if te < 0 then -- Ограничение списка song
+te = te + 1
 end
 -- Ограничение дальности при статусе полёта стрелы  ... для первого игрока
 for i = #bullets, 1, -1 do
@@ -194,6 +222,11 @@ end
 function drawGame()
 -- SET TITLE
 love.window.setTitle("Light vs Shadow (FPS:" .. love.timer.getFPS() .. ")") -- отображение fps (количество кадров в секунду)
+if m == 3 then
+love.graphics.scale( 1.4, sy )
+end
+
+
 -- Ограничение области камеры номер 1 для первого игрока
 if gameState == 2 then
 if distanceBetween(0,player.body:getY(),player.body:getX(),player.body:getY()) < 2100 then
@@ -231,10 +264,6 @@ player_1.body1:applyLinearImpulse(0, 100)
 end
 if monstr.grounded == true then -- Небольшой импульс вниз если первый противник стоит на земле
 monstr.body2:applyLinearImpulse(0, 100)
-end
--- Взаимодействие с кнопкой старта при игре на одного
-if ded == 2 then -- Статус игры на одного игрока
-player_1.body1:setX(99999) -- Отбрасывает второго игрока за пределы карты
 end
 -- Телепортация игроков в разных статусах
 if lk.isDown("e") then
@@ -298,6 +327,7 @@ chirik_sound:play()
 elseif distanceBetween(npc_bird.x,npc_bird.y,player_1.body1:getX(),player_1.body1:getY()) > 900 and chirik2 == 1 then
 chirik_sound:stop()
 end
+-- Временный код, который будет удалён при релизе
 TempCode()
 -- Нерабочая платформа
 function spawnPlatform(x, y, width, height)
@@ -323,7 +353,6 @@ player.angle, player.direction,1, sprites.player_1d:getWidth()/2, sprites.player
 monstr.animation:draw(monstr.sprite, monstr.body2:getX()+35, monstr.body2:getY()-3,
 monstr.angle, monstr.direction,1, sprites.monstr:getWidth()/2, sprites.monstr:getHeight()/2 )
 end
-mouseMenu()
 -- Смена спрайтов при нахождении в воздухе для первого игрока
 if player.dead == false then
 if player.grounded == false then
@@ -346,7 +375,8 @@ player_1.animation:draw(player_1.sprite, player_1.body1:getX(), player_1.body1:g
 player_1.angle, player_1.direction, 1, sprites.player_1d:getWidth()/2, sprites.player_1d:getHeight()/2 )
 gameMap:drawLayer(gameMap.layers["fon4"])
 gameMap:drawLayer(gameMap.layers["fon3"])
--- Background's MAI
+
+-- Background's Menu
 gameMap:drawLayer(gameMap.layers["background_8"])
 gameMap:drawLayer(gameMap.layers["background_7"])
 gameMap:drawLayer(gameMap.layers["background_6"])
@@ -380,10 +410,6 @@ coin_sound:play()
 monstr.body2:setX(99999)
 end
 end
--- Подключение меню текста
-lg.draw(sprites.menu_start, 515, 300, 0, 2)
-lg.draw(sprites.menu_options, 515, 400 , 0, 2)
-lg.draw(sprites.menu_exit, 515, 500 , 0, 2)
 -- Подключение эндинг текста (текст в конце игры)
 lg.setColor(COLORS.white) -- Цвет шрифта
 lg.setFont(game_over_font) -- Шрифт
@@ -400,7 +426,7 @@ lg.print("Kaito", player_1.body1:getX()-30, player_1.body1:getY()-70)
 end
 love.graphics.setColor(0, 0, 0) -- Цвет шрифта
 if monstr.dead == false then -- имя первого противника
-lg.print("testing", monstr.body2:getX()-28, monstr.body2:getY()-77)
+lg.print("Zombie", monstr.body2:getX()-28, monstr.body2:getY()-77)
 end
 lg.setColor(COLORS.white) -- Цвет шрифта
 -- Уровень жизни первого противника
@@ -441,7 +467,7 @@ player_1.body1:setType("dynamic")
 player_1.body1:applyLinearImpulse(500,-500)
 elseif
 distanceBetween(b.x,b.y,monstr.body2:getX()-50,monstr.body2:getY()-30) < 45 and monstr.dead == false then
-health3 = health3 - 1
+health_mob = health_mob - 1
 bullet.dead = true
 monstr.body2:setType("dynamic")
 monstr.body2:applyLinearImpulse(500,-500)
@@ -456,7 +482,7 @@ player_1.body1:setType("dynamic")
 player_1.body1:applyLinearImpulse(-500,-500)
 elseif
 distanceBetween(b.x,b.y,monstr.body2:getX()-50,monstr.body2:getY()-30) < 45 and monstr.dead == false then
-health3 = health3 - 1
+health_mob = health_mob - 1
 bullet_1.dead = true
 monstr.body2:setType("dynamic")
 monstr.body2:applyLinearImpulse(-500,-500)
@@ -481,14 +507,14 @@ end
 -- Стрела в ... второго игрока
 for i,b in ipairs(bullets_2) do
 if distanceBetween(b.x,b.y,player.body:getX()-75,player.body:getY()-30) < 45 and player.dead == false then
-health3 = health3 - 1
+health_mob = health_mob - 1
 health = health - 1
 bullet_2.dead = true
 player.body:setType("dynamic")
 player.body:applyLinearImpulse(500, -500)
 elseif
 distanceBetween(b.x,b.y,monstr.body2:getX()-50,monstr.body2:getY()-30) < 45 and monstr.dead == false then
-health3 = health3 - 1
+health_mob = health_mob - 1
 bullet_2.dead = true
 monstr.body2:setType("dynamic")
 monstr.body2:applyLinearImpulse(500,-500)
@@ -504,6 +530,9 @@ if arrows2 <= 0 then
 arb = 1
 end
 cam:detach() -- Деактивация камеры
+--lg.draw(sprites.menu_start, 515, 300, 0, 2)
+--lg.draw(sprites.menu_options, 515, 400 , 0, 2)
+--lg.draw(sprites.menu_exit, 515, 500 , 0, 2)
 -- Меню игры
 if gameState == 1 then
 dvig = 2
@@ -521,20 +550,173 @@ if gameState == 4 then
 dvig = 2
 dvig1 = 2
 end
+if gameState == 5 then
+dvig = 2
+dvig1 = 2
+end
+if rt == 3 and gameState == 1 then
+lg.draw(sprites.menu_start_pressed, 515, 300, 0, 2)
+lg.draw(sprites.menu_options, 515, 400 , 0, 2)
+lg.draw(sprites.menu_exit, 515, 500 , 0, 2)
+end
+if rt == 2 and gameState == 1 then
+lg.draw(sprites.menu_start, 515, 300, 0, 2)
+lg.draw(sprites.menu_options_pressed, 515, 400 , 0, 2)
+lg.draw(sprites.menu_exit, 515, 500 , 0, 2)
+end
+if rt == 1 and gameState == 1 then
+lg.draw(sprites.menu_start, 515, 300, 0, 2)
+lg.draw(sprites.menu_options, 515, 400 , 0, 2)
+lg.draw(sprites.menu_exit_pressed, 515, 500 , 0, 2)
+end
+if rt == 3 and gameState == 1 and love.keyboard.isDown("return") then
+gameState = 2
+player_1.dead = true
+player_1.body1:setX(99999)
+end
+if rt == 2 and gameState == 1 and love.keyboard.isDown("return") then
+--Опции
+end
+if rt == 1 and gameState == 1 and love.keyboard.isDown("return") then
+love.event.quit()
+end
+--Спец запуск на два игрока
+if rt == 3 and gameState == 1 and love.keyboard.isDown("2") then
+gameState = 2
+end
 if tt == 4 and gameState == 4 then
-lg.draw(sprites.menu4,500,300)
+lg.draw(sprites.menu4,520,215)
 end
 if tt == 3 and gameState == 4 then
-lg.draw(sprites.menu3,500,300)
+lg.draw(sprites.menu3,520,215)
 end
 if tt == 2 and gameState == 4 then
-lg.draw(sprites.menu2,500,300)
+lg.draw(sprites.menu2,520,215)
 end
 if tt == 1 and gameState == 4 then
-lg.draw(sprites.menu1,500,300)
+lg.draw(sprites.menu1,520,215)
+end
+if tt == 4 and gameState == 4 and love.keyboard.isDown("return") then
+gameState = 2
+end
+if tt == 3 and gameState == 4 and love.keyboard.isDown("return") then
+love.event.quit("restart")
+end
+if tt == 2 and gameState == 4 and love.keyboard.isDown("return") then
+gameState = 5
 end
 if tt == 1 and gameState == 4 and love.keyboard.isDown("return") then
 love.event.quit()
+end
+if gameState == 5 then
+lg.draw(sprites.options,300,0)
+lg.draw(sprites.HD,405,320)
+lg.draw(sprites.FullHD,555,320)
+lg.draw(sprites.FullHD,705,320)
+lg.draw(sprites.FullHD,855,320)
+end
+if tr == 5 and te == 10 and gameState == 5 then
+lg.draw(sprites.song10,560,230)
+main_sound:setVolume (1)
+chirik_sound:setVolume(1)
+coin_sound:setVolume(1)
+game_over_music:setVolume (1)
+menu_sfx:setVolume (1)
+end
+if tr == 5 and te == 9 and gameState == 5 then
+lg.draw(sprites.song9,560,230)
+main_sound:setVolume (0.9)
+chirik_sound:setVolume(0.9)
+coin_sound:setVolume(0.9)
+game_over_music:setVolume (0.9)
+menu_sfx:setVolume (0.9)
+end
+if tr == 5 and te == 8 and gameState == 5 then
+lg.draw(sprites.song8,560,230)
+main_sound:setVolume (0.8)
+chirik_sound:setVolume(0.8)
+coin_sound:setVolume(0.7)
+game_over_music:setVolume (0.8)
+menu_sfx:setVolume (0.8)
+end
+if tr == 5 and te == 7 and gameState == 5 then
+lg.draw(sprites.song7,560,230)
+main_sound:setVolume (0.7)
+chirik_sound:setVolume(0.7)
+coin_sound:setVolume(0.7)
+game_over_music:setVolume (0.7)
+menu_sfx:setVolume (0.7)
+end
+if tr == 5 and te == 6 and gameState == 5 then
+lg.draw(sprites.song6,560,230)
+main_sound:setVolume (0.6)
+chirik_sound:setVolume(0.6)
+coin_sound:setVolume(0.6)
+game_over_music:setVolume (0.6)
+menu_sfx:setVolume (0.6)
+end
+if tr == 5 and te == 5 and gameState == 5 then
+lg.draw(sprites.song5,560,230)
+main_sound:setVolume (0.5)
+chirik_sound:setVolume(0.5)
+coin_sound:setVolume(0.5)
+game_over_music:setVolume (0.5)
+menu_sfx:setVolume (0.5)
+end
+if tr == 5 and te == 4 and gameState == 5 then
+lg.draw(sprites.song4,560,230)
+main_sound:setVolume (0.4)
+chirik_sound:setVolume(0.4)
+coin_sound:setVolume(0.4)
+game_over_music:setVolume (0.4)
+menu_sfx:setVolume (0.4)
+end
+if tr == 5 and te == 3 and gameState == 5 then
+lg.draw(sprites.song3,560,230)
+main_sound:setVolume (0.3)
+chirik_sound:setVolume(0.3)
+coin_sound:setVolume(0.3)
+game_over_music:setVolume (0.3)
+menu_sfx:setVolume (0.3)
+end
+if tr == 5 and te == 2 and gameState == 5 then
+lg.draw(sprites.song2,560,230)
+main_sound:setVolume (0.2)
+chirik_sound:setVolume(0.2)
+coin_sound:setVolume(0.2)
+game_over_music:setVolume (0.2)
+menu_sfx:setVolume (0.2)
+end
+if tr == 5 and te == 1 and gameState == 5 then
+lg.draw(sprites.song1,560,230)
+main_sound:setVolume (0.1)
+chirik_sound:setVolume(0.1)
+coin_sound:setVolume(0.1)
+game_over_music:setVolume (0.1)
+menu_sfx:setVolume (0.1)
+end
+if tr == 5 and te == 0 and gameState == 5 then
+lg.draw(sprites.song0,560,230)
+main_sound:setVolume (0)
+chirik_sound:setVolume(0)
+coin_sound:setVolume(0)
+game_over_music:setVolume (0)
+menu_sfx:setVolume (0)
+end
+if tr == 4 and gameState == 5 then
+lg.draw(sprites.options,300,0)
+end
+if tr == 3 and gameState == 5 then
+lg.draw(sprites.options,300,0)
+end
+if tr == 2 and gameState == 5 then
+lg.draw(sprites.options,300,0)
+end
+if tr == 1 and gameState == 5 then
+lg.draw(sprites.options,300,0)
+end
+if gameState == 5 and love.keyboard.isDown("escape") then
+gameState = 2
 end
 -- Диалог первого игрока в разных статусах
 if kg == 2 and statusdialog == 2 then
@@ -615,15 +797,15 @@ dvig1 = 1
 end
 -- Отображение здоровья в начале игры
 if gameState == 2 then
-drawCoins()
-drawHealth()
+drawUI()
+--drawHealth()
 -- Отображение стрел при подборе лука для первого игрока
 if arb == 2 then
-drawArrows()
+  drawArrows()
 end
 -- Отображение стрел при подборе лука для первого игрока
 if arb == 3 then
-drawArrows2()
+--drawArrows2()
 end
 end
 end
@@ -655,13 +837,13 @@ health2 = health2 - 1
 tm = 3
 elseif key == "k"  and distanceBetween(player.body:getX(),player.body:getY(),monstr.body2:getX()+45,monstr.body2:getY()) < 35 and monstr.dead == false and timer6 >= 0 then
 timer6 = timer6 - 0.5
-health3 = health3 - 1
+health_mob = health_mob - 1
 monstr.body2:setType("dynamic")
 monstr.body2:applyLinearImpulse(-500,-500)
 tm = 2
 elseif key == "k"  and distanceBetween(player.body:getX(),player.body:getY(),monstr.body2:getX()-20,monstr.body2:getY()) < 35 and monstr.dead == false and timer6 >= 0 then
 timer6 = timer6 - 0.5
-health3 = health3 - 1
+health_mob = health_mob - 1
 monstr.body2:setType("dynamic")
 monstr.body2:applyLinearImpulse(500,-500)
 tm = 3
@@ -679,13 +861,13 @@ health = health - 1
 tm = 5
 elseif key == "f" and distanceBetween(monstr.body2:getX()+45,monstr.body2:getY(),player_1.body1:getX(),player_1.body1:getY()) < 35 and monstr.dead == false and timer7 >= 0 then
 timer7 = timer7 - 0.5
-health3 = health3 - 1
+health_mob = health_mob - 1
 monstr.body2:setType("dynamic")
 monstr.body2:applyLinearImpulse(-500,-500)
 tm = 4
 elseif key == "f" and distanceBetween(monstr.body2:getX()-35,monstr.body2:getY(),player_1.body1:getX(),player_1.body1:getY()) < 35 and monstr.dead == false and timer7 >= 0 then
 timer7 = timer7 - 0.5
-health3 = health3 - 1
+health_mob = health_mob - 1
 monstr.body2:setType("dynamic")
 monstr.body2:applyLinearImpulse(500,-500)
 tm = 5
@@ -717,10 +899,28 @@ elseif key == "1" and statusdialog_1 == 2 then
 statusdialog_1 = 3
 elseif key == "2" and statusdialog_1 == 2 then
 statusdialog_1 = 4
+elseif key == "up" and gameState == 1 then
+rt = rt + 1
+elseif key == "down" and gameState == 1 then
+rt = rt - 1
 elseif key == "up" and gameState == 4 then
 tt = tt + 1
 elseif key == "down" and gameState == 4 then
 tt = tt - 1
+elseif key == "up" and gameState == 5 then
+tr = tr + 1
+elseif key == "down" and gameState == 5 then
+tr = tr - 1
+elseif key == "left" and gameState == 5 then
+te = te - 1
+elseif key == "right" and gameState == 5 then
+te = te + 1
+elseif key == "5" then
+love.window.setMode(1366, 768)
+m = 2
+elseif key == "6" then
+m = 3
+love.window.setMode(1920, 1080)
 end
 end
 OtherFunctions()

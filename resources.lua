@@ -66,7 +66,23 @@ sprites.npcanimw = lg.newImage('assets/sprites/animation/npc/2npc_anim_stay.png'
 sprites.npcanimk = lg.newImage('assets/sprites/animation/npc/2npc_anim_move1.png')
 sprites.npcanimj = lg.newImage('assets/sprites/animation/npc/2npc_anim_move2.png')
 sprites.npcanimh = lg.newImage('assets/sprites/animation/npc/2npc_anim_cry.png')
--- MAIN MENU (BETA)
+--MENU
+sprites.FullHD = lg.newImage('assets/sprites/menu/FullHD.png')
+sprites.FullHD_2 = lg.newImage('assets/sprites/menu/FullHD_2.png')
+sprites.HD = lg.newImage('assets/sprites/menu/HD.png')
+sprites.HD_2 = lg.newImage('assets/sprites/menu/HD_2.png')
+sprites.options = lg.newImage('assets/sprites/menu/options.png')
+sprites.song10 = lg.newImage('assets/sprites/menu/music_100.png')
+sprites.song9 = lg.newImage('assets/sprites/menu/music_90.png')
+sprites.song8 = lg.newImage('assets/sprites/menu/music_80.png')
+sprites.song7 = lg.newImage('assets/sprites/menu/music_70.png')
+sprites.song6 = lg.newImage('assets/sprites/menu/music_60.png')
+sprites.song5 = lg.newImage('assets/sprites/menu/music_50.png')
+sprites.song4 = lg.newImage('assets/sprites/menu/music_40.png')
+sprites.song3 = lg.newImage('assets/sprites/menu/music_30.png')
+sprites.song2 = lg.newImage('assets/sprites/menu/music_20.png')
+sprites.song1 = lg.newImage('assets/sprites/menu/music_10.png')
+sprites.song0 = lg.newImage('assets/sprites/menu/music_0.png')
 sprites.menu4 = lg.newImage('assets/sprites/menu/menu4.png')
 sprites.menu3 = lg.newImage('assets/sprites/menu/menu3.png')
 sprites.menu2 = lg.newImage('assets/sprites/menu/menu2.png')
@@ -84,20 +100,23 @@ sprites.npc_bird = lg.newImage('assets/sprites/animation/npc/animals/birdanim1.p
 -- UI
 loadUI()
 end
-
 function loadSounds()
 -- Game Over sound
 game_over_music = la.newSource("assets/sounds/gameover.wav")
+game_over_music:setVolume (0.9)
+game_over_music:setPitch(0.9)
 -- Menu SFX Sounds
 menu_sfx = la.newSource("assets/sounds/sfx.wav")
+menu_sfx:setVolume (0.9)
+menu_sfx:setPitch(0.9)
 -- Main music
 main_sound = la.newSource("assets/sounds/main_sound.mp3")
 main_sound:setLooping(true)
-main_sound:setVolume (0.2)
+main_sound:setVolume (0.9)
 main_sound:setPitch(0.9)
 -- COIN COLLECT MUSIC
 coin_sound = la.newSource('assets/sounds/coin.mp3')
-coin_sound:setVolume(0.8)
+coin_sound:setVolume(0.9)
 coin_sound:setPitch(0.9)
 -- BIRD SOUND
 chirik_sound = la.newSource('assets/sounds/chirik.mp3')
@@ -123,6 +142,7 @@ gameState = 1 -- Cостояние игры
 2 - STATE_INGAME - Играем
 1 - STATE_MAINMENU - Главное меню
 ]]--
+m = 2
 arrows = 10 -- Количество стрел для первого игрока
 arrows2 = 10 -- Количество стрел для первого игрока
 arb = 1 -- Статус отсутствия лука у игроков
@@ -131,7 +151,12 @@ bird = 1
 kg = 1
 ki = 1
 to = 1
+--Опции
 tt = 4
+tr = 5
+rt = 3
+--
+te = 10
 ty = 1
 tm = 2
 tm = 4
@@ -162,21 +187,6 @@ timer10 = 0
 timer11 = 0
 end
 function loadButtons()
--- SETUP BUTTONS (for menu)
-button = {} -- 1 плеер
-button.x = 640
-button.y = 300
-button.size = 40
---
-button2 = {} -- 2 плеер
-button2.x = 640
-button2.y = 400
-button2.size = 40
---
-button1 = {} --выход
-button1.x = 640
-button1.y = 500
-button1.size = 40
 end
 function updatesCore(dt)
 -- MAP UPDATES
@@ -214,8 +224,8 @@ end
 if love.keyboard.isDown("f3") then
 main_sound:stop()
 end
-if love.keyboard.isDown("space") then
-love.event.quit("restart")
+if gameState == 1 and love.keyboard.isDown("escape") then
+love.event.quit()
 end
 end
 function OtherFunctions()
